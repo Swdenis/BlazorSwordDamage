@@ -1,16 +1,18 @@
 ﻿@page "/"
 
 <div class="container">
-    <div class=""row justify-content-center"">
+    <div class="row justify-content-center">
         <div class="col-3 text-left">
-            <input type="checkbox" class="form-check-input" id="flaming" />
+            <input type="checkbox" class="form-check-input" id="flaming"
+                   @bind="swordDamage.Flaming"/>
             <label class="form-check-label" for="flaming">
                 Flaming
             </label>
 
         </div>
         <div class="col-3 text-right">
-            <input type="checkbox" class="form-check-input" id="magic" />
+            <input type="checkbox" class="form-check-input" id="magic"
+                   @bind="swordDamage.Magic"/>
             <label class="form-check-label" for="magic">
                 Magic
             </label>
@@ -20,15 +22,32 @@
     </div>
     <div class="row justify-content-center mt-5">
         <div class="col-4 text-center">
-            <button type="button" class="btn btn-primary">
+            <button type="button" class="btn btn-primary"
+                    @onclick="RollDice">
                 Roll for damage
             </button>
         </div>
     </div>
     <div class="row justify-content-center mt-5">
         <div class="col-6 text-center">
-            <h3>Rolled 11 for 22 HP</h3>
+            <h3>Rolled @swordDamage.Roll for @swordDamage.Damage HP</h3>
 
         </div>
     </div>
 </div>
+
+@code {
+    Random random = new Random();
+    SwordDamage swordDamage = new SwordDamage(10);
+    
+    
+    protected override void OnInitialized()
+    {
+        RollDice();
+    }
+
+    public void RollDice()
+    {
+        swordDamage.Roll = random.Next(1, 7) + random.Next(1, 7) + random.Next(1, 7);
+    }
+}

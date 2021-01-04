@@ -1,45 +1,62 @@
 ﻿using System;
+using System.Diagnostics;
 namespace BlazorSwordDamage
 {
     public class SwordDamage
     {
-        public SwordDamage()
+        public SwordDamage(int startingRoll)
         {
-
+            roll = startingRoll;
+            CalculateDamage();
         }
         public const int BASE_DAMAGE = 3;
         public const int FLAME_DAMAGE = 2;
+        public int Damage { get; private set; }
 
-        public int Roll;
+        private int roll;
+
+        public int Roll {
+            get { return roll; }
+            set { roll = value;
+                CalculateDamage();
+            }
+        }
         public decimal MagicMultiplier = 1M;
         public int FlamingDamage = 0;
-        public int Damage;
+        
 
-        public void CalculateDamage()
+        private void CalculateDamage()
         {
-            Damage = (int)(Roll * MagicMultiplier) + BASE_DAMAGE + FlamingDamage;
+            decimal magicMultiplier = 1M;
+            if (Magic) magicMultiplier = 1.75M;
+
+            Damage = BASE_DAMAGE;
+            
+            Damage = (int)(Roll * magicMultiplier) + BASE_DAMAGE;
+            if (Flaming) Damage += FLAME_DAMAGE;
+            
         }
 
-        public void SetMagic(bool isMagic)
-        {
-            if(isMagic)
-            {
-                MagicMultiplier = 1.75M;
-            }
-            else
-            {
-                MagicMultiplier = 1M;
-            }
-            CalculateDamage();
-        }
+        private bool magic;
 
-        public void SetFlaming(bool isFlaming)
+        public bool Magic
         {
-            CalculateDamage();
-            if (isFlaming)
-            {
-                Damage += FLAME_DAMAGE;
+            get { return magic; }
+            set { magic = value;
+                CalculateDamage();
             }
         }
+       
+
+        private bool flaming;
+
+        public bool Flaming
+        {
+            get { return flaming;  }
+            set { flaming = value;
+                CalculateDamage();
+            }
+        }
+        
     }
 }
